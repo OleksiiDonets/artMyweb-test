@@ -44,6 +44,7 @@ export const UsersTable = ({users}) => {
       columns={columnsTable}
       dataSource={apiResponse}
       pagination={paginationConfig}
+      rowKey={(item) => item.id}
       onRow={(record, rowIndex) => {
           return {
             onClick: event => rowEvent(record.id)

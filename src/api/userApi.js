@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery, transformResponse } from '@reduxjs/toolkit/query/react';
-const clientToken = process.env.ACCESS_TOKEN;
+const clientToken = process.env.REACT_APP_ACCESS_TOKEN;
 
 export const usersApi = createApi({
   reducerPath: 'usersApi',
@@ -24,7 +24,6 @@ export const usersApi = createApi({
         }
       },
       providesTags: (result, error, page) =>{
-        console.log(result)
         return result ? [
           ...result.apiResponse.map(({id}) => ({type: 'Users', id})),
           {tpype: 'Users', id: 'PARTIAL_LIST'}
@@ -40,9 +39,15 @@ export const usersApi = createApi({
     selectEditUser: builder.query({
       query: (id) => `/public/v2/users/${id}`
     }),
-    postSaveEditUser: builder.query({
-      query: () => 
+    postSaveEditUser: builder.mutation({
+    
+      query: data => ({
+        url: `/public/v2/users/${data.id}`,
+        method: 'put',
+        body: data
+      }),
+      invalidatesTags: ['Users'],
     })
   })
 });
-export const { useGetUsersQuery, useSelectEditUserQuery  } = usersApi;
+export const { useGetUsersQuery, useSelectEditUserQuery, usePostSaveEditUserMutation  } = usersApi;
