@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Table } from 'antd';
+import { Table, Select } from 'antd';
 import { useGetUsersQuery } from '../../api/userApi';
 
 const columnsTable = [
@@ -22,35 +22,55 @@ const columnsTable = [
   }
 ];
 
-export const UsersTable = ({users}) => {
+export const UsersTable = () => {
+  const [gender, setGender] = useState('all');
   const [page, setPage] = useState(1);
   const navigate = useNavigate();
-  const {data:{apiResponse, totalPages} = {}} = useGetUsersQuery(page);
+  const {data: {apiResponse,  totalPages}} = useGetUsersQuery(page, {
+    selectFromResult: ({data}) =>({
+      data: {
+        apiResponse:data?.apiResponse.filter(user =>  gender !== 'all' ? user.gender === gender : user),
+        totalPages: data?.totalPages
+      }  
+      
+    })
+  });
 
-  const changePagi = (page) => {
-     setPage(page)
-  }
   const paginationConfig = {
     total: totalPages,
-    onChange: changePagi,
+    onChange: setPage,
     defaultPageSize: 20
   }
-  const rowEvent = (event) => {
-    navigate(`/edit/${event}`)
+  const rowEvent = (id) => {
+    navigate(`/edit/${id}`)
   }
   
+  const changeGenderFilter = (event) => {
+    setGender(event)
+  }
   return (
-    <Table
-      columns={columnsTable}
-      dataSource={apiResponse}
-      pagination={paginationConfig}
-      rowKey={(item) => item.id}
-      onRow={(record, rowIndex) => {
-          return {
-            onClick: event => rowEvent(record.id)
+    <>
+      <Select defaultValue='all'  onChange={changeGenderFilter} style={{
+          width: 200,
+          marginBottom: 40
+        }}>
+        <Select.Option value="all">All</Select.Option>
+        <Select.Option value="male">Male</Select.Option>
+        <Select.Option value="female">Female</Select.Option>
+      </Select>
+      <Table
+        columns={columnsTable}
+        dataSource={apiResponse}
+        pagination={paginationConfig}
+        rowKey={(item) => item.id}
+        onRow={(record, rowIndex) => {
+            return {
+              onClick: event => rowEvent(record.id)
+            }
           }
         }
-      }
-    />
+      />
+    </>
+    
   )
 }

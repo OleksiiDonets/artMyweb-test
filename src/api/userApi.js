@@ -26,7 +26,7 @@ export const usersApi = createApi({
       providesTags: (result, error, page) =>{
         return result ? [
           ...result.apiResponse.map(({id}) => ({type: 'Users', id})),
-          {tpype: 'Users', id: 'PARTIAL_LIST'}
+          {type: 'Users', id: 'PARTIAL_LIST'}
         ]: [
           {
             type: 'Users',
@@ -34,13 +34,12 @@ export const usersApi = createApi({
           }
         ]
       }
-    }),
 
+    }),
     selectEditUser: builder.query({
       query: (id) => `/public/v2/users/${id}`
     }),
     postSaveEditUser: builder.mutation({
-    
       query: data => ({
         url: `/public/v2/users/${data.id}`,
         method: 'put',
@@ -50,4 +49,4 @@ export const usersApi = createApi({
     })
   })
 });
-export const { useGetUsersQuery, useSelectEditUserQuery, usePostSaveEditUserMutation  } = usersApi;
+export const { useGetUsersQuery, useSelectEditUserQuery, usePostSaveEditUserMutation, useFilterGenderQuery  } = usersApi;

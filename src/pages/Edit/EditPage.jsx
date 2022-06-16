@@ -45,28 +45,14 @@ export const EditPage = () => {
       </Form.Item>
       <Form.Item label="Status">
         <Select defaultValue={data.status} name="status" onChange={onChangeStatus}>
-          <Select.Option value={data.status}>{data.status}</Select.Option>
-          {
-            (data.status === 'active') ? (
-              <Select.Option value="inactive">inactive</Select.Option>
-            ) : (
-              <Select.Option value="active">active</Select.Option>
-            )
-          }
-         
+          <Select.Option value="inactive">inactive</Select.Option>
+          <Select.Option value="active">active</Select.Option>
         </Select>
       </Form.Item>
       <Form.Item label="Gender">
         <Select defaultValue={data.gender} name="gender" onChange={onChangeGender}>
-          <Select.Option value={data.gender}>{data.gender}</Select.Option>
-          {
-            (data.gender === 'female') ? 
-            (
-              <Select.Option value="male">male</Select.Option>
-            ) : (
-              <Select.Option value="female">female</Select.Option>
-            )
-          }
+          <Select.Option value="male">male</Select.Option>
+          <Select.Option value="female">female</Select.Option>
         </Select>
       </Form.Item>
       <Form.Item>
